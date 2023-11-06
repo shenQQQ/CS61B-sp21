@@ -6,6 +6,7 @@ import ucb.util.CommandArgs;
 
 /** The main class for the 2048 game.
  *  @author P. N. Hilfinger
+ *  测试
  */
 public class Main {
 
