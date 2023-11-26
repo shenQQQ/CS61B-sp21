@@ -8,6 +8,7 @@ import java.util.Observable;
  *  @author TODO: YOUR NAME HERE
  */
 public class Model extends Observable {
+
     /** Current contents of the board. */
     private Board board;
     /** Current score. */
@@ -138,6 +139,14 @@ public class Model extends Observable {
      * */
     public static boolean emptySpaceExists(Board b) {
         // TODO: Fill in this function.
+        for (int i = 0; i < b.size(); i++) {
+            for (int j = 0; j < b.size(); j++) {
+                Tile tile = b.tile(i, j);
+                if (tile == null || tile.value() == 0) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
@@ -148,6 +157,14 @@ public class Model extends Observable {
      */
     public static boolean maxTileExists(Board b) {
         // TODO: Fill in this function.
+        for (int i = 0; i < b.size(); i++) {
+            for (int j = 0; j < b.size(); j++) {
+                Tile tile = b.tile(i, j);
+                if(tile != null && tile.value() == MAX_PIECE) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
@@ -159,6 +176,18 @@ public class Model extends Observable {
      */
     public static boolean atLeastOneMoveExists(Board b) {
         // TODO: Fill in this function.
+        for (int i = 0; i < b.size(); i++) {
+            for (int j = 0; j < b.size(); j++) {
+                Tile tile = b.tile(i, j);
+                if (tile == null || tile.value() == 0
+                    || (i > 0 && b.tile(i - 1, j).value() == tile.value())
+                    || (i < b.size() - 1 && b.tile(i + 1, j).value() == tile.value())
+                    || (j > 0 && b.tile(i, j - 1).value() == tile.value())
+                    || (j < b.size() - 1 && b.tile(i, j + 1).value() == tile.value())) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
