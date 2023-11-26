@@ -115,6 +115,36 @@ public class Model extends Observable {
         // for the tilt to the Side SIDE. If the board changed, set the
         // changed local variable to true.
 
+        board.setViewingPerspective(side);
+        for (int i = 0; i < board.size(); i++) {
+            for (int k = board.size() - 1; k >= 0; k--) {
+                for (int j = k - 1; j >= 0; j--) {
+                    Tile tile = board.tile(i, j);
+                    Tile temp = board.tile(i, k);
+                    if (tile == null || tile.value() == 0) {
+                        continue;
+                    } else if (temp == null || temp.value() == 0) {
+                        board.move(i, k, tile);
+                        changed = true;
+                    } else if (temp.value() == tile.value()) {
+                        boolean flag = true;
+                        for (int t = j + 1; t <= k - 1; t++) {
+                            if(!(board.tile(i, t) == null || board.tile(i, t).value() == 0)){
+                                flag = false;
+                            }
+                        }
+                        if (flag) {
+                            board.move(i, k, tile);
+                            score += board.tile(i ,k).value();
+                            k--;
+                            changed = true;
+                        }
+                    }
+                }
+            }
+        }
+        board.setViewingPerspective(Side.NORTH);
+
         checkGameOver();
         if (changed) {
             setChanged();
@@ -180,10 +210,10 @@ public class Model extends Observable {
             for (int j = 0; j < b.size(); j++) {
                 Tile tile = b.tile(i, j);
                 if (tile == null || tile.value() == 0
-                    || (i > 0 && b.tile(i - 1, j).value() == tile.value())
-                    || (i < b.size() - 1 && b.tile(i + 1, j).value() == tile.value())
-                    || (j > 0 && b.tile(i, j - 1).value() == tile.value())
-                    || (j < b.size() - 1 && b.tile(i, j + 1).value() == tile.value())) {
+                        || (i - 1 >= 0 && b.tile(i - 1, j) != null && b.tile(i - 1, j).value() == tile.value())
+                        || (i + 1 < b.size() && b.tile(i + 1, j) != null && b.tile(i + 1, j).value() == tile.value())
+                        || (j - 1 >= 0 && b.tile(i, j - 1) != null && b.tile(i, j - 1).value() == tile.value())
+                        || (j + 1 < b.size() && b.tile(i, j + 1) != null && b.tile(i, j + 1).value() == tile.value())) {
                     return true;
                 }
             }
